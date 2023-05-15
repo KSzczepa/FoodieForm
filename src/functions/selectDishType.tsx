@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, InputLabel, SelectChangeEvent, TextField } from "@mui/material";
-import { Control, Controller, FieldErrors, FormState, UseFormRegister, UseFormSetValue, useForm } from "react-hook-form";
+import { Control, Controller, FieldErrors, FormState, UseFormRegister, UseFormResetField, UseFormSetValue, useForm } from "react-hook-form";
 import { FormInputSlider } from "../components/FormInputSlider";
 
 import styles from '../components/MealForm.module.css';
@@ -10,7 +10,7 @@ import { FormValues } from "../types/FormValues";
 
 export function selectedDishType(
     register: UseFormRegister<any>, control: Control<any, any>,
-    setValue: UseFormSetValue<any>, errors: FieldErrors<any>, 
+    setValue: UseFormSetValue<any>, errors: FieldErrors<any>, resetField: UseFormResetField<FormValues>,
     dishType: string) {
 
     // const { reset } = useForm<FormValues>();
@@ -109,16 +109,24 @@ export function selectedDishType(
                     {no_of_slices}
                     {diameter}
                 </div>;
+                resetField("spiciness_scale");
+                resetField("slices_of_bread");
                 break;
             }
         case "soup":
             {
                 result = spiciness_scale;
+                resetField("no_of_slices");
+                resetField("diameter");
+                resetField("slices_of_bread");
                 break;
             }
         case "sandwich":
             {
-                result = slices_of_bread;
+                result = slices_of_bread;                
+                resetField("no_of_slices");
+                resetField("diameter");
+                resetField("spiciness_scale");
                 break;
             }
         default:

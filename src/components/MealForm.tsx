@@ -38,7 +38,6 @@ const MealForm = () => {
     };
 
     const postData = async (dataToPost: FormValues) => {
-
         const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
         postFormData(dataToPost, url);
     }
@@ -63,7 +62,7 @@ const MealForm = () => {
 
 
     useEffect(() => {
-        setAdditionalField(selectedType(register, control, setValue, errors, dishType));
+        setAdditionalField(selectedType(register, control, setValue, errors, resetField, dishType));
     }, [additionalInfo]);
 
     const clearForm = () => {
