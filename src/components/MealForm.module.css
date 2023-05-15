@@ -1,5 +1,6 @@
 .wrapper {
-    margin-top: 25px;
+    margin-top: 5rem;
+    text-align: center;
 }
 
 .element {
@@ -24,4 +25,13 @@
 
 .submitBtn:hover {
     background-color: #a242a2 !important;
+}
+
+.hiddenMenuItem {
+    height: 0;
+    visibility: hidden;
+    padding: 0 !important;
+    margin: 0;
+    /* pointerEvents: none; */
+    opacity: 0;
 }
