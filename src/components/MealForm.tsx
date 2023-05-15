@@ -8,43 +8,68 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormControl, TextField, MenuItem, Container, InputLabel, FormHelperText, Button } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TimeField } from '@mui/x-date-pickers/TimeField';
-import { FormInputSlider } from './FormInputSlider';
-import { selectedDishType } from '../functions/selectDishType';
+import { selectedDishType, selectedDishType as selectedType } from '../functions/selectDishType';
 import SendIcon from '@mui/icons-material/Send';
 import { FormValues } from '../types/FormValues'
 import { FilterFormData } from '../functions/validation';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const MealForm = () => {
 
-    const { register, handleSubmit, control, watch, formState: { errors }, setValue, getValues } =
+    const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, unregister, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
+
+  
+    
+
+
+    const postData = async (dataToPost: FormValues) => {
+
+        const response = await fetch('https://foodie-form-default-rtdb.firebaseio.com/food.json', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(dataToPost)
+        });
+        const data = await response.json();
+        console.log(data);
+
+        if (response.ok) {
+            toast.success('Message sent!', {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+
+        if (!response.ok) {
+            toast.error('An error occured:\n' + data.error, {
+                position: toast.POSITION.TOP_RIGHT
+            });
+        }
+    }
+
+
     const onSubmit = (data: FormValues) => {
-        const filteredData = FilterFormData(data);
+        const filteredData: FormValues = FilterFormData(data);
         console.log(filteredData);
 
-        const postData = async (dataToPost: FormValues) => {
-            const response = await fetch('https://example.com/api/users', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify(dataToPost)
-            });
-            const data = await response.json();
-            return data;
-          }
+        postData(filteredData);
+
+        setTimeout(clearForm, 250);        
     };
 
 
     const additionalInfo = {
-        dishName: watch("dishName"),
-        preparationTime: watch("preparationTime"),
-        dishType: watch("dishType"),
-        noSlices: watch("noSlices"),
+        name: watch("name"),
+        preparation_time: watch("preparation_time"),
+        type: watch("type"),
+        no_of_slices: watch("no_of_slices"),
         diameter: watch("diameter"),
-        spiciness: watch("spiciness"),
-        slicesOfBread: watch("slicesOfBread"),
+        spiciness_scale: watch("spiciness_scale"),
+        slices_of_bread: watch("slices_of_bread"),
     };
 
 
@@ -52,18 +77,24 @@ const MealForm = () => {
     const [dishType, setDishType] = React.useState('');
     const [additional_field, setAdditionalField] = React.useState(<div />);
 
-    const handleDishTypeChange = (event: SelectChangeEvent) => {
+    const handletypeChange = (event: SelectChangeEvent) => {
         if (event.target.value) {
             setDishType(event.target.value as string);
-            delete errors.dishType;
+            delete errors.type;
         }
     };
 
 
 
     useEffect(() => {
-        setAdditionalField(selectedDishType(register, control, setValue, errors, dishType));
+        setAdditionalField(selectedType(register, control, setValue, errors, dishType));
     }, [additionalInfo]);
+
+    const clearForm = () => {
+        reset();
+        setDuration(dayjs('2022-04-17T00:00'));
+        setDishType('');
+    }
 
     return (
         <div className={styles.wrapper}>
@@ -73,10 +104,10 @@ const MealForm = () => {
                         <FormControl fullWidth>
                             <TextField
                                 label='Dish name'
-                                error={Boolean(errors.dishName)}
-                                helperText={errors.dishName?.message}
+                                error={Boolean(errors.name)}
+                                helperText={errors.name?.message}
                                 variant="outlined"
-                                {...register("dishName", {
+                                {...register("name", {
                                     required: "Name is required",
                                     minLength: {
                                         value: 3,
@@ -94,7 +125,7 @@ const MealForm = () => {
                                     label="Preparation Time"
                                     value={duration}
                                     format="HH:mm:ss"
-                                    {...register("preparationTime", {
+                                    {...register("preparation_time", {
                                         required: "Preparation time is required"
                                     })}
                                     onChange={(newValue) => setDuration(newValue)} />
@@ -104,18 +135,19 @@ const MealForm = () => {
 
                     <div className={styles.element}>
                         <FormControl fullWidth>
-                            <InputLabel style={errors.dishType ? { color: "#d32f2f" } : {}}>Dish type</InputLabel>
+                            <InputLabel style={errors.type ? { color: "#d32f2f" } : {}}>Dish type</InputLabel>
                             <Select
                                 value={dishType}
                                 label="Dish type"
-                                error={Boolean(errors.dishType)}
-                                {...register("dishType", { required: "Dish type is required" })}
-                                onChange={(handleDishTypeChange)}>
+                                error={Boolean(errors.type)}
+                                {...register("type", { required: "Dish type is required" })}
+                                onChange={(handletypeChange)}>
+                                <MenuItem className={styles.hiddenMenuItem} value=""></MenuItem>
                                 <MenuItem value="pizza">Pizza</MenuItem>
                                 <MenuItem value="soup">Soup</MenuItem>
                                 <MenuItem value="sandwich">Sandwich</MenuItem>
                             </Select>
-                            {errors.dishType && <FormHelperText style={{ color: "#d32f2f" }}>{errors.dishType.message}</FormHelperText>}
+                            {errors.type && <FormHelperText style={{ color: "#d32f2f" }}>{errors.type.message}</FormHelperText>}
                         </FormControl>
                     </div>
 
@@ -129,6 +161,7 @@ const MealForm = () => {
                     >
                         Submit
                     </Button>
+                    {/* <Button onClick={onClickHandler}>Clear</Button> */}
 
                 </Container>
 
