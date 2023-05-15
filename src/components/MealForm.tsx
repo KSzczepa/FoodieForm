@@ -11,7 +11,7 @@ import { TimeField } from '@mui/x-date-pickers/TimeField';
 import { selectedDishType, selectedDishType as selectedType } from '../functions/selectDishType';
 import SendIcon from '@mui/icons-material/Send';
 import { FormValues } from '../types/FormValues'
-import { FilterFormData } from '../functions/validation';
+import { FilterFormData } from '../functions/modifyFormData';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
