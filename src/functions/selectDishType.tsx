@@ -4,13 +4,16 @@ import { FormInputSlider } from "../components/FormInputSlider";
 
 import styles from '../components/MealForm.module.css';
 import { useState } from "react";
+import { FormValues } from "../types/FormValues";
 
 
 
 export function selectedDishType(
     register: UseFormRegister<any>, control: Control<any, any>,
-    setValue: UseFormSetValue<any>, errors: FieldErrors<any>, dishType: string) {
+    setValue: UseFormSetValue<any>, errors: FieldErrors<any>, 
+    dishType: string) {
 
+    // const { reset } = useForm<FormValues>();
 
     let result: JSX.Element = <div></div>;
 
@@ -19,12 +22,12 @@ export function selectedDishType(
             <FormControl fullWidth>
                 <TextField
                     label="Number of slices"
-                    error={Boolean(errors.noSlices)}
-                    helperText={errors.noSlices ? String(errors.noSlices?.message) : ''}
+                    error={Boolean(errors.no_of_slices)}
+                    helperText={errors.no_of_slices ? String(errors.no_of_slices?.message) : ''}
                     type="number"
                     variant="outlined"
                     InputProps={{ inputProps: { min: 1, max: 100 } }}
-                    {...register("noSlices", {
+                    {...register("no_of_slices", {
                         required: dishType === "pizza" ? "This field is required" : false,
                         min: {
                             value: 1,
@@ -33,8 +36,8 @@ export function selectedDishType(
                     })
                     }
                 />
-                {/* {errors.noSlices && <FormHelperText style={{ color: "#d32f2f" }}>
-                    {String(errors.noSlices.message)}</FormHelperText>} */}
+                {/* {errors.no_of_slices && <FormHelperText style={{ color: "#d32f2f" }}>
+                    {String(errors.no_of_slices.message)}</FormHelperText>} */}
             </FormControl >
         </div>
 
@@ -76,7 +79,7 @@ export function selectedDishType(
                     step={1}
                     defaultValue={5}
                 />
-                {errors.spiciness && <p>This information is required.</p>}
+                {errors.spiciness_scale && <p>This information is required.</p>}
             </FormControl >
         </div>
 
@@ -84,12 +87,12 @@ export function selectedDishType(
         <div style={{ padding: '15px' }}>
             <FormControl fullWidth>
                 <TextField
-                    error={Boolean(errors.slicesOfBread)}
-                    helperText={errors.slicesOfBread ? String(errors.slicesOfBread?.message) : ''}
+                    error={Boolean(errors.slices_of_bread)}
+                    helperText={errors.slices_of_bread ? String(errors.slices_of_bread?.message) : ''}
                     type="number"
                     label="Number of slices of bread"
                     variant="outlined"
-                    {...register("slicesOfBread", {
+                    {...register("slices_of_bread", {
                         required: dishType === "sandwich" ? "This field is required" : false,
                         min: {
                             value: 1,
