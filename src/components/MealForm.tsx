@@ -17,7 +17,6 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { postFormData } from '../functions/modifyFormData';
 
-
 const MealForm = () => {
 
     const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, unregister, resetField } =
@@ -70,6 +69,10 @@ const MealForm = () => {
         setDuration(dayjs('2022-04-17T00:00'));
         setDishType('');
     }
+
+    // const onClickHandler = () => {
+    //     console.log(processSelectedOption(additionalInfo));
+    // }
 
     return (
         <div className={styles.wrapper}>
@@ -147,3 +150,4 @@ const MealForm = () => {
 }
 
 export default MealForm;
+

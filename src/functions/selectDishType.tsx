@@ -70,7 +70,7 @@ export function selectedDishType(
         <div style={{ padding: '15px' }}>
             <FormControl fullWidth>
                 <InputLabel className={styles.inputLabel}>Spiciness scale</InputLabel>
-                <FormInputSlider name={"spiciness"}
+                <FormInputSlider name={"spiciness_scale"}
                     control={control}
                     setValue={setValue}
                     label={"Spiciness scale"}
