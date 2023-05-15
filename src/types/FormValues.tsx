@@ -1,10 +1,10 @@
 
 export type FormValues =  {
-    dishName: string;
-    preparationTime: number;
-    dishType: string;
-    noSlices?: number;
+    name: string;
+    preparation_time: number;
+    type: string;
+    no_of_slices?: number;
     diameter?: number;
-    spiciness?: number;
-    slicesOfBread?: number;
+    spiciness_scale?: number;
+    slices_of_bread?: number;
 }
