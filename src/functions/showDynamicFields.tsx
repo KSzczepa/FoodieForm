@@ -82,7 +82,6 @@ const DisplayFieldsForSelectedOption = (
                     max={10}
                     step={1}
                     defaultValue={5}
-                    ref={sliderHandleRef}
                 />
                 {errors.spiciness_scale && <p>This information is required.</p>}
             </FormControl >
