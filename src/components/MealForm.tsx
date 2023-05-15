@@ -15,6 +15,7 @@ import { FilterFormData } from '../functions/validation';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { postFormData } from '../functions/modifyFormData';
 
 
 const MealForm = () => {
@@ -22,45 +23,9 @@ const MealForm = () => {
     const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, unregister, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
 
-  
-    
-
-
-    const postData = async (dataToPost: FormValues) => {
-
-        const response = await fetch('https://foodie-form-default-rtdb.firebaseio.com/food.json', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dataToPost)
-        });
-        const data = await response.json();
-        console.log(data);
-
-        if (response.ok) {
-            toast.success('Message sent!', {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        }
-
-        if (!response.ok) {
-            toast.error('An error occured:\n' + data.error, {
-                position: toast.POSITION.TOP_RIGHT
-            });
-        }
-    }
-
-
-    const onSubmit = (data: FormValues) => {
-        const filteredData: FormValues = FilterFormData(data);
-        console.log(filteredData);
-
-        postData(filteredData);
-
-        setTimeout(clearForm, 250);        
-    };
-
+    const [duration, setDuration] = React.useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
+    const [dishType, setDishType] = React.useState('');
+    const [additional_field, setAdditionalField] = React.useState(<div />);
 
     const additionalInfo = {
         name: watch("name"),
@@ -72,10 +37,22 @@ const MealForm = () => {
         slices_of_bread: watch("slices_of_bread"),
     };
 
+    const postData = async (dataToPost: FormValues) => {
 
-    const [duration, setDuration] = React.useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
-    const [dishType, setDishType] = React.useState('');
-    const [additional_field, setAdditionalField] = React.useState(<div />);
+        const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
+        postFormData(dataToPost, url);
+    }
+
+
+    const onSubmit = (data: FormValues) => {
+        const filteredData: FormValues = FilterFormData(data);
+        console.log(filteredData);
+
+        postData(filteredData);
+
+        setTimeout(clearForm, 250);
+    };
+
 
     const handletypeChange = (event: SelectChangeEvent) => {
         if (event.target.value) {
@@ -83,7 +60,6 @@ const MealForm = () => {
             delete errors.type;
         }
     };
-
 
 
     useEffect(() => {
