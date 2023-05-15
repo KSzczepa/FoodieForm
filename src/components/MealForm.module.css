@@ -1,0 +1,27 @@
+.wrapper {
+    margin-top: 25px;
+}
+
+.element {
+    padding: 15px;
+}
+
+.formLabel {
+    display: block;
+    /* padding: 15px; */
+}
+
+.inputLabel {
+    position: relative !important;
+    top: -10px !important;
+}
+
+.submitBtn {
+    margin-top: 15px !important;
+    background-color: purple !important;
+    
+}
+
+.submitBtn:hover {
+    background-color: #a242a2 !important;
+}
