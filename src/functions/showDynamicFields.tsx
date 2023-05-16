@@ -1,22 +1,24 @@
 import { FormControl, InputLabel, TextField } from "@mui/material";
-import { Control, FieldErrors, UseFormRegister, UseFormResetField, UseFormSetValue } from "react-hook-form";
+import { Control, Controller, FieldErrors, UseFormRegister, UseFormResetField, UseFormSetValue } from "react-hook-form";
 import { FormInputSlider } from "../components/FormInputSlider";
 import { FormValues } from '../types/FormValues'
 
 import styles from '../components/MealForm.module.css';
 import { useRef } from "react";
 
-const DisplayFieldsForSelectedOption = (
-    register: UseFormRegister<FormValues>, control: Control<FormValues, any>, setValue: UseFormSetValue<FormValues>, 
-    errors: FieldErrors<FormValues>, resetField: UseFormResetField<FormValues>, dishType: string) => {
+interface SelectedFieldsInterface {
+    register: UseFormRegister<FormValues>;
+    control: Control<FormValues, any>;
+    setValue: UseFormSetValue<FormValues>;
+    errors: FieldErrors<FormValues>;
+    resetField: UseFormResetField<FormValues>;
+    dishType: string;
+}
+
+const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, resetField, dishType }: SelectedFieldsInterface) => {
 
     let result: JSX.Element = <div></div>;
 
-    interface sliderValuerRef {
-        setSliderValueHandler: (newValue: number | number[]) => void;
-    }
-    
-    const sliderHandleRef = useRef<sliderValuerRef>(null);
 
     const no_of_slices =
         <div style={{ padding: '15px' }}>
@@ -64,11 +66,6 @@ const DisplayFieldsForSelectedOption = (
             </FormControl >
         </div>
 
-    const handleSetSliderValue = () => {
-        if (sliderHandleRef.current) {
-            sliderHandleRef.current.setSliderValueHandler(1);
-        }
-    }
 
     const spiciness_scale =
         <div style={{ padding: '15px' }}>
@@ -110,27 +107,45 @@ const DisplayFieldsForSelectedOption = (
         case "pizza":
             {
                 result = <div>
-                    {no_of_slices}
-                    {diameter}
+                    <Controller
+                        name={"no_of_slices"}
+                        control={control}
+                        render={({ field, fieldState, formState }) => (
+                            no_of_slices
+                        )}
+                    />
+                    <Controller
+                        name={"diameter"}
+                        control={control}
+                        render={({ field, fieldState, formState }) => (
+                            diameter
+                        )}
+                    />
                 </div>;
-                resetField("spiciness_scale");
-                resetField("slices_of_bread");
                 break;
             }
         case "soup":
             {
-                result = spiciness_scale;
-                resetField("no_of_slices");
-                resetField("diameter");
-                resetField("slices_of_bread");
+                result =
+                    <Controller
+                        name={"spiciness_scale"}
+                        control={control}
+                        render={({ field, fieldState, formState }) => (
+                            spiciness_scale
+                        )}
+                    />;
                 break;
             }
         case "sandwich":
             {
-                result = slices_of_bread;
-                resetField("no_of_slices");
-                resetField("diameter");
-                resetField("spiciness_scale");
+                result =
+                    <Controller
+                        name={"slices_of_bread"}
+                        control={control}
+                        render={({ field, fieldState, formState }) => (
+                            slices_of_bread
+                        )}
+                    />;
                 break;
             }
         default:
@@ -143,5 +158,5 @@ const DisplayFieldsForSelectedOption = (
 }
 
 
-export default DisplayFieldsForSelectedOption;
+export default DynamicFieldsForSelectedOption;
 
