@@ -4,7 +4,6 @@ import { FormInputSlider } from "../components/FormInputSlider";
 import { FormValues } from '../types/FormValues'
 
 import styles from '../components/MealForm.module.css';
-import { useRef } from "react";
 
 interface SelectedFieldsInterface {
     register: UseFormRegister<FormValues>;
@@ -17,8 +16,7 @@ interface SelectedFieldsInterface {
 
 const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, resetField, dishType }: SelectedFieldsInterface) => {
 
-    let result: JSX.Element = <div></div>;
-
+    let activeComponent: JSX.Element = <div></div>;
 
     const no_of_slices =
         <div style={{ padding: '15px' }}>
@@ -66,7 +64,6 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, r
             </FormControl >
         </div>
 
-
     const spiciness_scale =
         <div style={{ padding: '15px' }}>
             <FormControl fullWidth>
@@ -103,58 +100,62 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, r
             </FormControl >
         </div>
 
-    switch (dishType) {
-        case "pizza":
-            {
-                result = <div>
-                    <Controller
-                        name={"no_of_slices"}
-                        control={control}
-                        render={({ field, fieldState, formState }) => (
-                            no_of_slices
-                        )}
-                    />
-                    <Controller
-                        name={"diameter"}
-                        control={control}
-                        render={({ field, fieldState, formState }) => (
-                            diameter
-                        )}
-                    />
-                </div>;
-                break;
-            }
-        case "soup":
-            {
-                result =
-                    <Controller
-                        name={"spiciness_scale"}
-                        control={control}
-                        render={({ field, fieldState, formState }) => (
-                            spiciness_scale
-                        )}
-                    />;
-                break;
-            }
-        case "sandwich":
-            {
-                result =
-                    <Controller
-                        name={"slices_of_bread"}
-                        control={control}
-                        render={({ field, fieldState, formState }) => (
-                            slices_of_bread
-                        )}
-                    />;
-                break;
-            }
-        default:
-            result = <div />;
-            break;
+    const switchActiveComponent = (dishType: string) => {
+        switch (dishType) {
+            case "pizza":
+                {
+                    activeComponent = <div>
+                        <Controller
+                            name={"no_of_slices"}
+                            control={control}
+                            render={() => (
+                                no_of_slices
+                            )}
+                        />
+                        <Controller
+                            name={"diameter"}
+                            control={control}
+                            render={() => (
+                                diameter
+                            )}
+                        />
+                    </div>;
+                    break;
+                }
+            case "soup":
+                {
+                    activeComponent =
+                        <Controller
+                            name={"spiciness_scale"}
+                            control={control}
+                            render={() => (
+                                spiciness_scale
+                            )}
+                        />;
+                    break;
+                }
+            case "sandwich":
+                {
+                    activeComponent =
+                        <Controller
+                            name={"slices_of_bread"}
+                            control={control}
+                            render={() => (
+                                slices_of_bread
+                            )}
+                        />;
+                    break;
+                }
+            default:
+                activeComponent = <div />;
+                break;    
+        }
 
+        return activeComponent;
     }
+    
 
-    return result;
+    return switchActiveComponent(dishType);
 }
 
 
