@@ -1,68 +1,41 @@
 import styles from './MealForm.module.css';
 
-import React, { ElementType, useEffect, useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import dayjs, { Dayjs } from 'dayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormControl, TextField, MenuItem, Container, InputLabel, FormHelperText, Button } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { TimeField } from '@mui/x-date-pickers/TimeField';
-import { selectedDishType, selectedDishType as selectedType } from '../functions/selectDishType';
 import SendIcon from '@mui/icons-material/Send';
 import { FormValues } from '../types/FormValues'
-import { FilterFormData } from '../functions/modifyFormData';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { postFormData } from '../functions/modifyFormData';
+import { filterFormData, postFormData, resetUnselectedFields } from '../functions/modifyFormData';
+import DynamicFieldsForSelectedOption from '../functions/showDynamicFields';
 
 const MealForm = () => {
 
-    const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, unregister, resetField } =
+    const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
 
     const [duration, setDuration] = React.useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
     const [dishType, setDishType] = React.useState('');
-    const [additional_field, setAdditionalField] = React.useState(<div />);
-
-    const additionalInfo = {
-        name: watch("name"),
-        preparation_time: watch("preparation_time"),
-        type: watch("type"),
-        no_of_slices: watch("no_of_slices"),
-        diameter: watch("diameter"),
-        spiciness_scale: watch("spiciness_scale"),
-        slices_of_bread: watch("slices_of_bread"),
-    };
-
-    const postData = async (dataToPost: FormValues) => {
-        const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
-        postFormData(dataToPost, url);
-    }
-
 
     const onSubmit = (data: FormValues) => {
-        const filteredData: FormValues = FilterFormData(data);
+        const filteredData: FormValues = filterFormData(data);
         console.log(filteredData);
+        const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
 
-        postData(filteredData);
-
+        postFormData(filteredData, url);
         setTimeout(clearForm, 250);
     };
-
 
     const handletypeChange = (event: SelectChangeEvent) => {
         if (event.target.value) {
             setDishType(event.target.value as string);
+            resetUnselectedFields(event.target.value, resetField);
             delete errors.type;
         }
     };
-
-
-    useEffect(() => {
-        setAdditionalField(selectedType(register, control, setValue, errors, resetField, dishType));
-    }, [additionalInfo]);
 
     const clearForm = () => {
         reset();
@@ -70,14 +43,12 @@ const MealForm = () => {
         setDishType('');
     }
 
-    // const onClickHandler = () => {
-    //     console.log(processSelectedOption(additionalInfo));
-    // }
 
     return (
         <div className={styles.wrapper}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Container maxWidth="xs">
+                    
                     <div className={styles.element}>
                         <FormControl fullWidth>
                             <TextField
@@ -129,7 +100,14 @@ const MealForm = () => {
                         </FormControl>
                     </div>
 
-                    {additional_field}
+                    <DynamicFieldsForSelectedOption 
+                        register = {register}
+                        control = {control}
+                        setValue = {setValue}
+                        errors = {errors}
+                        resetField = {resetField}
+                        dishType = {dishType}
+                    />
 
                     <Button
                         className={styles.submitBtn}
@@ -139,11 +117,8 @@ const MealForm = () => {
                     >
                         Submit
                     </Button>
-                    {/* <Button onClick={onClickHandler}>Clear</Button> */}
-
+                    
                 </Container>
-
-
             </form>
         </div>
     );
