@@ -1,7 +1,8 @@
 import { toast } from 'react-toastify';
 import { FormValues } from '../types/FormValues'
+import { UseFormResetField } from 'react-hook-form';
 
-export function FilterFormData(data: FormValues) {
+export function filterFormData(data: FormValues) {
     return Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== undefined)) as FormValues;
 }
 
@@ -77,3 +78,34 @@ export async function showPostRequestResult(result: Response) {
         });
     }
 } 
+
+// const conditionalFields: string[] = ["no_of_slices", "diameter", "spiciness_scale", "slices_of_bread"];
+
+
+export function resetUnselectedFields(type: string, resetField: UseFormResetField<FormValues>) {
+    switch (type) {
+        case "pizza":
+            {                
+                resetField("spiciness_scale");
+                resetField("slices_of_bread");
+                break;
+            }
+        case "soup":
+            {
+                resetField("no_of_slices");
+                resetField("diameter");
+                resetField("slices_of_bread");
+                break;
+            }
+        case "sandwich":
+            {
+                resetField("no_of_slices");
+                resetField("diameter");
+                resetField("spiciness_scale");
+                break;
+            }
+        default:
+            break;
+
+    }
+}
