@@ -14,7 +14,7 @@ import DynamicFieldsForSelectedOption from '../functions/ConditionalFields';
 
 const MealForm = () => {
 
-    const { register, handleSubmit, control, watch, formState: { errors }, setValue, reset, resetField } =
+    const { register, handleSubmit, control, formState: { errors }, setValue, reset, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
 
     const [duration, setDuration] = React.useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
@@ -24,6 +24,7 @@ const MealForm = () => {
         const filteredData: FormValues = filterFormData(data);
         console.log(filteredData);
         const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
+        // const url = 'https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/';
 
         postFormData(filteredData, url);
         setTimeout(clearForm, 250);
