@@ -24,7 +24,7 @@ function filterForKeysToRemove(selectedDishType: string) {
     let keys: string[] = [];
 
     for (let i = 0; i< dishTypePairs.length; i++) {
-        if (dishTypePairs[i].name == selectedDishType) {
+        if (dishTypePairs[i].name === selectedDishType) {
             keys = allKeysForConditionalField.filter((element => !dishTypePairs[i].keys.includes(element)));
         }
     }
@@ -40,6 +40,10 @@ function processSelectedOption(inputData: FormValues) {
 export async function postFormData(data: FormValues, url: string) {
     const dataToPost = processSelectedOption(data);
 
+    toast.info('Submitting...', {
+        position: toast.POSITION.TOP_RIGHT
+    });
+
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -54,13 +58,16 @@ export async function postFormData(data: FormValues, url: string) {
 export async function showPostRequestResult(result: Response) {
     const receivedData = await result.json();
 
-    if (result.ok) {
+    if (result.ok) {        
+        toast.dismiss();
         toast.success('Message sent!', {
             position: toast.POSITION.TOP_RIGHT
         });
+
     }
 
     if (!result.ok) {
+        setTimeout(() => {toast.dismiss();}, 250);
         toast.error('An error occured:\n' + receivedData.error, {
             position: toast.POSITION.TOP_RIGHT
         });
