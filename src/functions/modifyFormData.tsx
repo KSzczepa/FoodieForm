@@ -79,9 +79,6 @@ export async function showPostRequestResult(result: Response) {
     }
 } 
 
-// const conditionalFields: string[] = ["no_of_slices", "diameter", "spiciness_scale", "slices_of_bread"];
-
-
 export function resetUnselectedFields(type: string, resetField: UseFormResetField<FormValues>) {
     switch (type) {
         case "pizza":
@@ -109,3 +106,4 @@ export function resetUnselectedFields(type: string, resetField: UseFormResetFiel
 
     }
 }
+
