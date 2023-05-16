@@ -20,16 +20,19 @@ const removeDataByKeywords = (data: Record<string, any>, keywords: string[]): ob
       return newData as FormValues;
 };
 
-
-function processSelectedOption(inputData: FormValues) {
+function filterForKeysToRemove(selectedDishType: string) {
     let keys: string[] = [];
 
     for (let i = 0; i< dishTypePairs.length; i++) {
-        if (dishTypePairs[i].name == inputData.type) {
+        if (dishTypePairs[i].name == selectedDishType) {
             keys = allKeysForConditionalField.filter((element => !dishTypePairs[i].keys.includes(element)));
         }
     }
+    return keys;
+}
 
+function processSelectedOption(inputData: FormValues) {    
+    const keys = filterForKeysToRemove(inputData.type);
     const outputData = removeDataByKeywords(inputData, keys);
     return outputData;
 }
@@ -64,7 +67,8 @@ export async function showPostRequestResult(result: Response) {
     }
 } 
 
-export function resetUnselectedFields(type: string, resetField: UseFormResetField<FormValues>) {
+export function resetUnselectedFields(type: string, resetField: UseFormResetField<FormValues>) {  
+      
     switch (type) {
         case "pizza":
             {                
