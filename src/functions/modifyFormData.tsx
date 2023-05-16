@@ -1,6 +1,6 @@
-import { toast } from 'react-toastify';
 import { FormValues, allKeysForConditionalField, dishTypePairs } from '../types/FormValues'
 import { UseFormResetField } from 'react-hook-form';
+import { toastHandler } from './toastHandler';
 
 export function filterFormData(data: FormValues) {
     return Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== undefined)) as FormValues;
@@ -40,9 +40,7 @@ function processSelectedOption(inputData: FormValues) {
 export async function postFormData(data: FormValues, url: string) {
     const dataToPost = processSelectedOption(data);
 
-    toast.info('Submitting...', {
-        position: toast.POSITION.TOP_RIGHT
-    });
+    toastHandler('PENDING');
 
     const response = await fetch(url, {
         method: 'POST',
@@ -59,18 +57,11 @@ export async function showPostRequestResult(result: Response) {
     const receivedData = await result.json();
 
     if (result.ok) {        
-        toast.dismiss();
-        toast.success('Message sent!', {
-            position: toast.POSITION.TOP_RIGHT
-        });
-
+        toastHandler('SUCCESS');
     }
 
     if (!result.ok) {
-        toast.dismiss();
-        toast.error('An error occured:\n' + receivedData.error, {
-            position: toast.POSITION.TOP_RIGHT
-        });
+        toastHandler('ERROR', String(receivedData.error));
     }
 } 
 
