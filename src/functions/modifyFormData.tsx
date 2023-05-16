@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import { FormValues } from '../types/FormValues'
+import { FormValues, allKeysForConditionalField, dishTypePairs } from '../types/FormValues'
 import { UseFormResetField } from 'react-hook-form';
 
 export function filterFormData(data: FormValues) {
@@ -20,29 +20,14 @@ const removeDataByKeywords = (data: Record<string, any>, keywords: string[]): ob
       return newData as FormValues;
 };
 
+
 function processSelectedOption(inputData: FormValues) {
-    let keys: string[];
+    let keys: string[] = [];
 
-    switch (inputData.type) {
-        case "pizza":
-            {
-                keys = ["spiciness_scale", "slices_of_bread"];
-                break;
-            }
-        case "soup":
-            {
-                keys = ["no_of_slices", "diameter", "slices_of_bread"];
-                break;
-            }
-        case "sandwich":
-            {
-                keys = ["no_of_slices", "diameter", "spiciness_scale"];
-                break;
-            }
-        default:
-            keys = ["no_of_slices", "diameter", "spiciness_scale", "slices_of_bread"];
-            break;
-
+    for (let i = 0; i< dishTypePairs.length; i++) {
+        if (dishTypePairs[i].name == inputData.type) {
+            keys = allKeysForConditionalField.filter((element => !dishTypePairs[i].keys.includes(element)));
+        }
     }
 
     const outputData = removeDataByKeywords(inputData, keys);
