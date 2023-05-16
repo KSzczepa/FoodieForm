@@ -67,7 +67,7 @@ export async function showPostRequestResult(result: Response) {
     }
 
     if (!result.ok) {
-        setTimeout(() => {toast.dismiss();}, 250);
+        toast.dismiss();
         toast.error('An error occured:\n' + receivedData.error, {
             position: toast.POSITION.TOP_RIGHT
         });
