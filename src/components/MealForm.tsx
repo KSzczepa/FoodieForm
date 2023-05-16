@@ -10,7 +10,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SendIcon from '@mui/icons-material/Send';
 import { FormValues } from '../types/FormValues'
 import { filterFormData, postFormData, resetUnselectedFields } from '../functions/modifyFormData';
-import DynamicFieldsForSelectedOption from '../functions/showDynamicFields';
+import DynamicFieldsForSelectedOption from '../functions/ConditionalFields';
 
 const MealForm = () => {
 
@@ -48,7 +48,7 @@ const MealForm = () => {
         <div className={styles.wrapper}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Container maxWidth="xs">
-                    
+
                     <div className={styles.element}>
                         <FormControl fullWidth>
                             <TextField
