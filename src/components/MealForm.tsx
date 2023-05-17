@@ -1,6 +1,6 @@
 import styles from './MealForm.module.css';
 
-import React from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import dayjs, { Dayjs } from 'dayjs';
 import { LocalizationProvider, TimeField } from '@mui/x-date-pickers';
@@ -17,8 +17,9 @@ const MealForm = () => {
     const { register, handleSubmit, control, formState: { errors }, setValue, reset, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
 
-    const [duration, setDuration] = React.useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
-    const [dishType, setDishType] = React.useState('');
+    const [duration, setDuration] = useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
+    const [dishType, setDishType] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
     const onSubmit = (data: FormValues) => {
         const filteredData: FormValues = filterFormData(data);
@@ -36,6 +37,14 @@ const MealForm = () => {
             resetUnselectedFields(event.target.value, resetField);
             delete errors.type;
         }
+    };
+
+    const handleFocus = () => {
+        setIsFocused(true);
+    };
+
+    const handleBlur = () => {
+        setIsFocused(false);
     };
 
     const clearForm = () => {
@@ -75,9 +84,12 @@ const MealForm = () => {
                                     label="Preparation Time"
                                     value={duration}
                                     format="HH:mm:ss"
+                                    helperText={isFocused ? <span className={styles.helperPrepTime}>Time is in the format HH:MM:SS</span> : ''}
                                     {...register("preparation_time", {
                                         required: "Preparation time is required"
                                     })}
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
                                     onChange={(newValue) => setDuration(newValue)} />
                             </LocalizationProvider>
                         </FormControl>
@@ -92,7 +104,7 @@ const MealForm = () => {
                                 error={Boolean(errors.type)}
                                 {...register("type", { required: "Dish type is required" })}
                                 onChange={(handletypeChange)}>
-                                <MenuItem className={styles.hiddenMenuItem} value=""></MenuItem>
+                                <MenuItem className={styles.hiddenMenuItem}></MenuItem>
                                 <MenuItem value="pizza">Pizza</MenuItem>
                                 <MenuItem value="soup">Soup</MenuItem>
                                 <MenuItem value="sandwich">Sandwich</MenuItem>
@@ -101,13 +113,13 @@ const MealForm = () => {
                         </FormControl>
                     </div>
 
-                    <DynamicFieldsForSelectedOption 
-                        register = {register}
-                        control = {control}
-                        setValue = {setValue}
-                        errors = {errors}
-                        resetField = {resetField}
-                        dishType = {dishType}
+                    <DynamicFieldsForSelectedOption
+                        register={register}
+                        control={control}
+                        setValue={setValue}
+                        errors={errors}
+                        resetField={resetField}
+                        dishType={dishType}
                     />
 
                     <Button
@@ -118,7 +130,7 @@ const MealForm = () => {
                     >
                         Submit
                     </Button>
-                    
+
                 </Container>
             </form>
         </div>
