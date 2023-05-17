@@ -27,13 +27,12 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, r
                     helperText={errors.no_of_slices ? String(errors.no_of_slices?.message) : ''}
                     type="number"
                     variant="outlined"
-                    InputProps={{ inputProps: { min: 1, max: 100 } }}
                     {...register("no_of_slices", {
                         required: dishType === "pizza" ? "This field is required" : false,
                         min: {
                             value: 1,
                             message: "Minimum value is 1"
-                        },
+                        }
                     })
                     }
                 />
@@ -49,7 +48,7 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, r
                     type="number"
                     label="Diameter in cm"
                     variant="outlined"
-                    InputProps={{ inputProps: { min: 5, max: 100, step: 0.1 } }}
+                    InputProps={{ inputProps: { step: 0.1 } }}
                     {...register("diameter", {
                         required: dishType === "pizza" ? "This field is required" : false,
                         min: {
@@ -77,7 +76,7 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, r
                     step={1}
                     defaultValue={5}
                 />
-                {errors.spiciness_scale && <p>This information is required.</p>}
+                {errors.spiciness_scale && <span>This information is required.</span>}
             </FormControl >
         </div>
 
