@@ -8,7 +8,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { FormControl, TextField, MenuItem, Container, InputLabel, FormHelperText, Button } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SendIcon from '@mui/icons-material/Send';
-import { FormValues } from '../../assets/types/FormValuesType'
+import { FormValues } from '../../models/types/FormValuesType'
 import { filterFormData, resetUnselectedFields, showPostRequestResultForMealForm } from '../../shared/modifyFormData';
 import DynamicFieldsForSelectedOption from './ConditionalFields';
 import { toastHandler } from '../../shared/toastHandler';
@@ -19,7 +19,7 @@ const MealForm = () => {
     const { register, handleSubmit, control, formState: { errors }, setValue, reset, resetField } =
         useForm<FormValues>({ mode: "onTouched" });
 
-    const [duration, setDuration] = useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
+    const [duration, setDuration] = useState<Dayjs | null>(dayjs().startOf('day'));
     const [dishType, setDishType] = useState('');
     const [isPrepTimeFieldFocused, setIsPrepTimeFieldFocused] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
@@ -56,10 +56,9 @@ const MealForm = () => {
 
     const clearForm = () => {
         reset();
-        setDuration(dayjs('2022-04-17T00:00'));
+        setDuration(dayjs().startOf('day'));
         setDishType('');
     }
-
 
     return (
         <div className={styles.wrapper}>
@@ -97,7 +96,10 @@ const MealForm = () => {
                                     })}
                                     onFocus={handleFocusPrepTime}
                                     onBlur={handleBlurPrepTime}
-                                    onChange={(newValue) => setDuration(newValue)} />
+                                    onChange={(newValue) => {
+                                        setDuration(newValue);
+                                        setValue("preparation_time", newValue == null ? newValue : newValue.format('HH:mm:ss'));
+                                    }} />
                             </LocalizationProvider>
                         </FormControl>
                     </div>
