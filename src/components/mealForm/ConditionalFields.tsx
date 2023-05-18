@@ -68,7 +68,7 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, d
                     setValue={setValue}
                     label={"Spiciness scale"}
                     min={1}
-                    max={11}
+                    max={10}
                     step={1}
                     defaultValue={5}
                 />
