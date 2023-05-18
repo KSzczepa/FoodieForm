@@ -9,8 +9,10 @@ import { FormControl, TextField, MenuItem, Container, InputLabel, FormHelperText
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import SendIcon from '@mui/icons-material/Send';
 import { FormValues } from '../../assets/types/FormValuesType'
-import { filterFormData, postFormData, resetUnselectedFields } from '../../shared/modifyFormData';
+import { filterFormData, resetUnselectedFields, showPostRequestResultForMealForm } from '../../shared/modifyFormData';
 import DynamicFieldsForSelectedOption from './ConditionalFields';
+import { toastHandler } from '../../shared/toastHandler';
+import { postFormData } from '../../shared/postRequestHandler';
 
 const MealForm = () => {
 
@@ -19,16 +21,19 @@ const MealForm = () => {
 
     const [duration, setDuration] = useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
     const [dishType, setDishType] = useState('');
-    const [isTimeFieldFocused, setIsTimeFieldFocused] = useState(false);
+    const [isPrepTimeFieldFocused, setIsPrepTimeFieldFocused] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const onSubmit = async (data: FormValues) => {
         const filteredData: FormValues = filterFormData(data);
+        const url = 'https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/';
+
         setIsSubmitting(true);
+        toastHandler('PENDING');
 
-         const url = 'https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/';
+        const response = await postFormData(filteredData, url);
+        showPostRequestResultForMealForm(response, data);
 
-        await postFormData(filteredData, url);
         clearForm();
         setIsSubmitting(false);
     };
@@ -42,11 +47,11 @@ const MealForm = () => {
     };
 
     const handleFocusPrepTime = () => {
-        setIsTimeFieldFocused(true);
+        setIsPrepTimeFieldFocused(true);
     };
 
     const handleBlurPrepTime = () => {
-        setIsTimeFieldFocused(false);
+        setIsPrepTimeFieldFocused(false);
     };
 
     const clearForm = () => {
@@ -69,7 +74,11 @@ const MealForm = () => {
                                 helperText={errors.name?.message}
                                 variant="outlined"
                                 {...register("name", {
-                                    required: "Name is required"
+                                    required: "Name is required",
+                                    minLength: {
+                                        value: 3,
+                                        message: "Dish name must contain at least 3 characters"
+                                    },
                                 })}
                             />
                         </FormControl>
@@ -82,7 +91,7 @@ const MealForm = () => {
                                     label="Preparation Time"
                                     value={duration}
                                     format="HH:mm:ss"
-                                    helperText={isTimeFieldFocused ? <span className={styles.helperPrepTime}>HH:MM:SS</span> : ''}
+                                    helperText={isPrepTimeFieldFocused ? <span className={styles.helperPrepTime}>HH:MM:SS</span> : ''}
                                     {...register("preparation_time", {
                                         required: "Preparation time is required"
                                     })}
@@ -124,7 +133,7 @@ const MealForm = () => {
                         className={styles.submitBtn}
                         type="submit"
                         variant="contained"
-                        disabled = {isSubmitting}
+                        disabled={isSubmitting}
                         endIcon={<SendIcon />}
                     >
                         Submit
