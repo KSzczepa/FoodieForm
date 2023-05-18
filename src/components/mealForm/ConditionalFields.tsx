@@ -143,12 +143,12 @@ const DynamicFieldsForSelectedOption = ({ register, control, setValue, errors, d
                 }
             default:
                 activeComponent = <div />;
-                break;    
+                break;
         }
 
         return activeComponent;
     }
-    
+
 
     return switchActiveComponent(dishType);
 }
