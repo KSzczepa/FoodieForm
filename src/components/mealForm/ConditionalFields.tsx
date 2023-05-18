@@ -1,7 +1,7 @@
 import { FormControl, InputLabel, TextField } from "@mui/material";
 import { Control, Controller, FieldErrors, UseFormRegister, UseFormResetField, UseFormSetValue } from "react-hook-form";
 import { FormInputSlider } from "../common_comp/FormInputSlider";
-import { FormValues } from '../../assets/types/FormValuesType'
+import { FormValues } from '../../models/types/FormValuesType'
 
 import styles from './ConditionalFields.module.css';
 

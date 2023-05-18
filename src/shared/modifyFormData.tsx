@@ -1,7 +1,7 @@
-import { FormValues } from '../assets/types/FormValuesType'
+import { FormValues } from '../models/types/FormValuesType'
 import { UseFormResetField } from 'react-hook-form';
 import { toastHandler } from './toastHandler';
-import { pairsOfDishAndKey } from '../assets/mealFormDefaultKeyValues';
+import { pairsOfDishAndKey } from '../models/requiredFieldsByDishType';
 
 export function filterFormData(data: FormValues) {
     return Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== undefined)) as FormValues;

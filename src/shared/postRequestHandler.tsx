@@ -1,4 +1,4 @@
-import { FormValues } from "../assets/types/FormValuesType";
+import { FormValues } from "../models/types/FormValuesType";
 
 export async function postFormData(data: FormValues, url: string) {
 
