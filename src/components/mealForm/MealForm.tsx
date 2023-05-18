@@ -19,17 +19,14 @@ const MealForm = () => {
 
     const [duration, setDuration] = useState<Dayjs | null>(dayjs('2022-04-17T00:00'));
     const [dishType, setDishType] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
+    const [isTimeFieldFocused, setIsTimeFieldFocused] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
 
     const onSubmit = async (data: FormValues) => {
         const filteredData: FormValues = filterFormData(data);
-        console.log(filteredData);
         setIsSubmitting(true);
 
-        // const url = 'https://foodie-form-default-rtdb.firebaseio.com/food.json';
          const url = 'https://umzzcc503l.execute-api.us-west-2.amazonaws.com/dishes/';
-        //const url = 'http://localhost:4000/api/post';
 
         await postFormData(filteredData, url);
         clearForm();
@@ -44,12 +41,12 @@ const MealForm = () => {
         }
     };
 
-    const handleFocus = () => {
-        setIsFocused(true);
+    const handleFocusPrepTime = () => {
+        setIsTimeFieldFocused(true);
     };
 
-    const handleBlur = () => {
-        setIsFocused(false);
+    const handleBlurPrepTime = () => {
+        setIsTimeFieldFocused(false);
     };
 
     const clearForm = () => {
@@ -85,12 +82,12 @@ const MealForm = () => {
                                     label="Preparation Time"
                                     value={duration}
                                     format="HH:mm:ss"
-                                    helperText={isFocused ? <span className={styles.helperPrepTime}>HH:MM:SS</span> : ''}
+                                    helperText={isTimeFieldFocused ? <span className={styles.helperPrepTime}>HH:MM:SS</span> : ''}
                                     {...register("preparation_time", {
                                         required: "Preparation time is required"
                                     })}
-                                    onFocus={handleFocus}
-                                    onBlur={handleBlur}
+                                    onFocus={handleFocusPrepTime}
+                                    onBlur={handleBlurPrepTime}
                                     onChange={(newValue) => setDuration(newValue)} />
                             </LocalizationProvider>
                         </FormControl>
