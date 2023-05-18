@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import './App.css';
-import MealForm from './components/MealForm';
+import MealForm from './components/mealForm/MealForm';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

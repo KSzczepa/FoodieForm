@@ -12,11 +12,6 @@
     /* padding: 15px; */
 }
 
-.inputLabel {
-    position: relative !important;
-    top: -10px !important;
-}
-
 .submitBtn {
     margin-top: 15px !important;
     background-color: purple !important;

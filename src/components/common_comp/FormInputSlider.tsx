@@ -15,7 +15,7 @@ interface sliderProps {
 
 export const FormInputSlider:
     React.FC<sliderProps> =
-    ({ name, control, setValue, label, min=0, max=100, step=1, defaultValue=0 }) => {
+    ({ name, control, setValue, label, min, max, step=1, defaultValue=0 }) => {
         const [sliderValue, setSliderValue] = React.useState(0);
 
         useEffect(() => {
