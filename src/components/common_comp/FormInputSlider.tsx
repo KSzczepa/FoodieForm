@@ -29,7 +29,7 @@ export const FormInputSlider:
         return <Controller
             name={name}
             control={control}
-            render={({ field, fieldState, formState }) => (
+            render={() => (
                 <Slider
                     value={sliderValue}
                     onChange={handleChange}
