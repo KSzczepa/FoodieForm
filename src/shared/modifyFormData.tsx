@@ -7,37 +7,6 @@ export function filterFormData(data: FormValues) {
     return Object.fromEntries(Object.entries(data).filter(([key, value]) => value !== undefined)) as FormValues;
 }
 
-// const removeDataByKeywords = (data: Record<string, any>, keywords: string[]): object => {
-//     const filteredData = Object.keys(data).filter((key) => {
-//       return !keywords.some((keyword) => key.includes(keyword));
-//     });
-//     const newData = filteredData.reduce((obj, key) => {
-//         return {
-//           ...obj,
-//           [key]: data[key],
-//         };
-//       }, {});
-    
-//       return newData as FormValues;
-// };
-
-// function filterForKeysToRemove(selectedDishType: string) {
-//     let keys: string[] = [];
-
-//     for (let i = 0; i< pairsOfDishAndKey.length; i++) {
-//         if (pairsOfDishAndKey[i].dishName === selectedDishType) {
-//             keys = allkeysForConditionalField.filter((element => !pairsOfDishAndKey[i].keyFields.includes(element)));
-//         }
-//     }
-//     return keys;
-// }
-
-// function processSelectedOption(inputData: FormValues) {    
-//     const keys = filterForKeysToRemove(inputData.type);
-//     const outputData = removeDataByKeywords(inputData, keys);
-//     return outputData;
-// }
-
 export async function postFormData(data: FormValues, url: string) {
 
     toastHandler('PENDING');
@@ -67,8 +36,7 @@ export async function showPostRequestResult(result: Response, data: FormValues) 
         errorMessage = '';
         for (const key in data) {
             if (receivedData[key]) {
-                // console.log(receivedData[key][0], key);
-                errorMessage = errorMessage + key + ": " + receivedData[key][0] + ": ";
+                errorMessage = errorMessage + key + ": " + receivedData[key][0] + " ";
             }
 
         }
