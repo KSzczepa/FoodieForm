@@ -14,5 +14,5 @@ COPY . .
 RUN npm run build
 
 CMD ["sh", "-c", "npm start"]
-# CMD ["sh", "-c", "npm run start:production"]
+
 EXPOSE 5000
